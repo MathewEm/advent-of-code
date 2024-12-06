@@ -1,4 +1,5 @@
 from datetime import datetime
+from itertools import permutations
 
 INPUT_PATH = f'./input/day2.txt'
 
@@ -8,6 +9,21 @@ def partTwoAnswer(input):
     print(f'Day Two, Part Two\nThere are {safeDampenerReports} Safe Dampener Reports!')
 
     return
+
+def partTwoConditions(input):
+
+    intput = convertToInt(input)
+
+    for row in intput:
+        for n in range(0, len(row)):
+            reducedRow = row.pop(n)
+            permsList = permutations(reducedRow)
+            for perms in permsList:
+                diffList = []
+                for k in range(0,len(perms)):
+                    diffList.append(perms[k+1] - perms[k])
+            
+    
 
 def getDampenerCount(input):
     
