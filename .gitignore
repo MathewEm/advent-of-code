@@ -1,5 +1,6 @@
 .env
 **/*.txt
+!requirements.txt
 **/.DS_Store
 **/*.png
 **/*.json
