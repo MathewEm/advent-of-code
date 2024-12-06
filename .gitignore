@@ -1,2 +1,6 @@
-**/.env
+./.env
 **/*.txt
+./.DS_Store
+**/*.png
+**/*.json
+**/venv
