@@ -1,85 +1,48 @@
 from datetime import datetime
-from itertools import permutations
 
 INPUT_PATH = f'./input/day2.txt'
 
 def partTwoAnswer(input):
 
-    safeDampenerReports = getDampenerCount(input)
+    safeDampenerReports = countConditions(input)
     print(f'Day Two, Part Two\nThere are {safeDampenerReports} Safe Dampener Reports!')
 
     return
 
+def countConditions(input):
+
+    intput = convertToInt(input)
+    validCounter = 0
+
+    for row in intput:
+        if partTwoConditions(row):
+            validCounter += 1
+
+    return validCounter
+    
 def partTwoConditions(input):
 
-    intput = convertToInt(input)
-
-    for row in intput:
-        for n in range(0, len(row)):
-            reducedRow = row.pop(n)
-            permsList = permutations(reducedRow)
-            for perms in permsList:
-                diffList = []
-                for k in range(0,len(perms)):
-                    diffList.append(perms[k+1] - perms[k])
-            
-    
-
-def getDampenerCount(input):
-    
-    return checkConditions(removeOneDirection(input))
-
-def removeOneDirection(input):
-
-    intputTable = getDirection(input)
-    betterInput = []
-
-    for row in list(intputTable.keys()):
-
-        indexRemove = False
-        for n in range(0,len(row)-1):
-            print(row)
-            if intputTable[row] == 'increasing':
-                if row[n+1] < row[n] or row[n+1] == row[n]:
-                    indexRemove = n+1
-            else:
-                if row[n+1] > row[n] or row[n+1] == row[n]:
-                    indexRemove = n+1
-        if indexRemove:
-            betterInput.append(list(row).remove(row[indexRemove]))
-        else:
-            betterInput.append(list(row))
-
-        return betterInput
-
-def getDirection(input):
-
-    intput = convertToInt(input)
-    intputTable = {}
-
-    for row in intput:
-
-        increasing = 0
-        decreasing = 0
-        flat = 0
-
-        for n in range(0,len(row)-1):
-
-            if row[n+1] > row[n]:
-                increasing += 1
-            if row[n+1] < row[n]:
-                decreasing += 1
-            else:
-                flat += 1
-        if flat < 2:
-            
-            if (increasing > decreasing) and (decreasing < 2):
-                intputTable[tuple(row)] = 'increasing'
-            if (decreasing > increasing) and (increasing < 2):
-                intputTable[tuple(row)] = 'decreasing'
-    return intputTable
+    stepSet = {-3, -2, -1, 1, 2, 3}
+    for n in range(0,len(input)):
+        removeOne = input.copy()
+        removeOne.pop(n)
+        diffList = []
+        isIncreasing = []
+        passCondition = True
+        for k in range(0,len(removeOne)-1):
+            diffList.append(removeOne[k+1] - removeOne[k])
+        for j in diffList:
+            if j not in stepSet:
+                passCondition = False
+        for l in diffList:
+            isIncreasing.append(l > 0)
+        if len(set(isIncreasing)) > 1:
+            passCondition = False
+        if passCondition:
+            return True
+        
+    return passCondition
                        
-
 def partOneAnswer(input):
 
     safeReports = checkConditions(input)
