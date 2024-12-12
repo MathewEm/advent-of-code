@@ -5,11 +5,31 @@ INPUT_PATH = f'./input/day3.txt'
 
 def partTwoAnswer(input):
 
-    return f'Incomplete'
+    return print(f'Incomplete')
 
 def partOneAnswer(input):
 
-    return f'Incomplete'
+    PartOne = 0
+
+    for row in input:
+        mulNums = getMulMatches(row)
+        if len(mulNums) > 0:
+            for pair in mulNums:
+                PartOne += int(pair[0]) * int(pair[1])
+            
+    return print(f'Day Three, Part One\nTotal multiplication summation: {PartOne}')
+
+def getMulMatches(input):
+
+    pattern = r"mul\(\d+,\d+\)"
+
+    mulMatches = re.findall(pattern, input)
+
+    mulNumbers = []
+    for match in mulMatches:
+         mulNumbers.append(re.split(r"[(,)]+", match)[1:3])
+
+    return mulNumbers
 
 def getInput():
     
@@ -19,7 +39,22 @@ def getInput():
 
     return lines
 
+def testString():
+
+    testStr = "-~who()?!-{ where()mul(764,406)?^why()%[how(420,460)mu"
+    pattern = r"mul\(\d+,\d+\)"
+
+    matches = re.findall(pattern, testStr)
+    print(f'Matches: {matches}')
+
+    mulNums = []
+    for match in matches:
+         mulNum = re.split(r"[(,)]+", match)[1:3]
+    print(f'mulNum: {mulNum}')
+    
+
 if __name__ == "__main__":
+    
     start = datetime.now()
     input = getInput()
     partOneAnswer(input)
