@@ -5,7 +5,42 @@ INPUT_PATH = f'./input/day3.txt'
 
 def partTwoAnswer(input):
 
-    return print(f'Incomplete')
+    PartTwo = partTwoController(input)
+    
+    return print(f'Day Three, Part Two\nTotal valid multiplication summation: {PartTwo}')
+
+def partTwoController(input):
+
+    PartTwo = 0
+    
+    for row in input:
+        validString = getValidString(row)
+        mulNumbers = getMulMatches(validString)
+        print(f'{mulNumbers}\n')
+        if len(mulNumbers) > 0:
+            for pair in mulNumbers:
+                PartTwo += int(pair[0]) * int(pair[1])
+
+    return PartTwo
+
+def getValidString(input):
+
+    doPattern = r"do\(\)"
+    dontPattern = r"don't\(\)"
+
+
+    doMatches = re.search(doPattern, input)
+    dontMatches = re.search(dontPattern, input)
+
+    if dontMatches:
+        dontCount = len(re.findall(dontPattern, input))
+        dontSplit = re.split(dontPattern, input)
+        return dontSplit[0] + testString(dontSplit[1:][0])
+    elif doMatches:
+        doSplit = re.split(doPattern, input)
+        return testString(doSplit[1:][0])
+    else:
+        return input
 
 def partOneAnswer(input):
 
@@ -39,21 +74,31 @@ def getInput():
 
     return lines
 
-def testString():
+def testString(testStr = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"):
 
-    testStr = "-~who()?!-{ where()mul(764,406)?^why()%[how(420,460)mu"
-    pattern = r"mul\(\d+,\d+\)"
+    
+    mulPattern = r"mul\(\d+,\d+\)"
+    doPattern = r"do\(\)"
+    dontPattern = r"don't\(\)"
 
-    matches = re.findall(pattern, testStr)
-    print(f'Matches: {matches}')
 
-    mulNums = []
-    for match in matches:
-         mulNum = re.split(r"[(,)]+", match)[1:3]
-    print(f'mulNum: {mulNum}')
+    doMatches = re.search(doPattern, testStr)
+    dontMatches = re.search(dontPattern, testStr)
+
+    if dontMatches:
+        dontCount = len(re.findall(dontPattern, testStr))
+        dontSplit = re.split(dontPattern, testStr)
+        return dontSplit[0] + testString(dontSplit[1:][0])
+    elif doMatches:
+        doSplit = re.split(doPattern, testStr)
+        return testString(doSplit[1:][0])
+    else:
+        return testStr
+        
     
 
 if __name__ == "__main__":
+    #print(f'Test String: {testString()}')
     
     start = datetime.now()
     input = getInput()
