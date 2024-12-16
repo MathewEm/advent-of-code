@@ -12,11 +12,12 @@ def partTwoAnswer(input):
 def partTwoController(input):
 
     PartTwo = 0
+
+    input = [input[0]]
     
     for row in input:
         validString = getValidString(row)
         mulNumbers = getMulMatches(validString)
-        print(f'{mulNumbers}\n')
         if len(mulNumbers) > 0:
             for pair in mulNumbers:
                 PartTwo += int(pair[0]) * int(pair[1])
@@ -28,17 +29,17 @@ def getValidString(input):
     doPattern = r"do\(\)"
     dontPattern = r"don't\(\)"
 
-
-    doMatches = re.search(doPattern, input)
     dontMatches = re.search(dontPattern, input)
 
     if dontMatches:
-        dontCount = len(re.findall(dontPattern, input))
-        dontSplit = re.split(dontPattern, input)
-        return dontSplit[0] + testString(dontSplit[1:][0])
-    elif doMatches:
-        doSplit = re.split(doPattern, input)
-        return testString(doSplit[1:][0])
+        beforeDont = input[:dontMatches.start()]
+        afterDont = input[dontMatches.end():]
+        doMatches = re.search(doPattern, afterDont)
+        if doMatches:
+            afterDo = afterDont[doMatches.end():]
+            return beforeDont + getValidString(afterDo)
+        else:
+            return beforeDont
     else:
         return input
 
