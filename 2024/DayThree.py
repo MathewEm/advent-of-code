@@ -12,15 +12,16 @@ def partTwoAnswer(input):
 def partTwoController(input):
 
     PartTwo = 0
-
-    input = [input[0]]
+    newString = ""
     
     for row in input:
-        validString = getValidString(row)
-        mulNumbers = getMulMatches(validString)
-        if len(mulNumbers) > 0:
-            for pair in mulNumbers:
-                PartTwo += int(pair[0]) * int(pair[1])
+        newString = newString + row
+        
+    validString = getValidString(newString)
+    mulNumbers = getMulMatches(validString)
+    if len(mulNumbers) > 0:
+        for pair in mulNumbers:
+            PartTwo += int(pair[0]) * int(pair[1])
 
     return PartTwo
 
